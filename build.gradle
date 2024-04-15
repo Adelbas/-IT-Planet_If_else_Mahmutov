@@ -1,0 +1,87 @@
+plugins {
+    id 'java'
+    alias(libs.plugins.spring)
+    alias(libs.plugins.open.api)
+}
+
+group = 'ru.adel'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation libs.spring.data.jpa
+    implementation libs.spring.web
+    implementation libs.spring.security
+
+    implementation libs.liquibase
+    implementation libs.postgresql.driver
+    implementation libs.javax.annotation
+
+    implementation libs.lombok
+    annotationProcessor libs.lombok
+
+    implementation libs.spring.validation
+
+    implementation libs.open.api.springdoc
+    implementation libs.open.api.generator
+    implementation libs.swagger.annotations
+
+    implementation libs.mapstruct
+    annotationProcessor libs.mapstruct.processor
+
+
+//    testImplementation libs.assertj
+//    testImplementation libs.spring.test
+//    testImplementation libs.testcontainers.jupiter
+//    testImplementation libs.testcontainers.postgresql
+}
+
+openApiGenerate {
+    generatorName.set("spring")
+    inputSpec.set("$rootDir/src/main/resources/openapi/weather-app.yaml")
+    outputDir.set("$buildDir/generated/openapi")
+    apiPackage.set("ru.adel.api")
+    invokerPackage.set("ru.adel.invoker")
+    modelPackage.set("ru.adel.model")
+    configOptions.set([
+            library                             : "spring-boot",
+            useOptional                         : "false",
+            openApiNullable                     : "false",
+            interfaceOnly                       : "true",
+            useJakartaEe                        : "true",
+            sourceFolder                        : "",
+            generatedConstructorWithRequiredArgs: "false",
+            additionalModelTypeAnnotations      : "@lombok.NoArgsConstructor\n" +
+                    "@lombok.AllArgsConstructor\n@lombok.Builder(toBuilder = true)\n" +
+                    "@com.fasterxml.jackson.annotation.JsonIgnoreProperties(ignoreUnknown=true)\n" +
+                    "@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)",
+            useTags                             : "true"
+    ])
+}
+
+compileJava.dependsOn tasks.openApiGenerate
+
+sourceSets {
+    main {
+        java {
+            srcDirs += "$buildDir/generated"
+        }
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

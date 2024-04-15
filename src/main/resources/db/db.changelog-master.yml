@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - preConditions:
+      - onFail: HALT
+      - dbms:
+          type: postgresql
+  - include :
+      file: classpath:/db/changelog/001-create-table-client.sql
+  - include:
+      file: classpath:/db/changelog/002-create-table-region-type.sql
+  - include:
+      file: classpath:/db/changelog/003-create-table-region.sql
+  - include:
+      file: classpath:/db/changelog/004-create-table-weather.sql
+  - include:
+      file: classpath:/db/changelog/005-create-table-forecast.sql

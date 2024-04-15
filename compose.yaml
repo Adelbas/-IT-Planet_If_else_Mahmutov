@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  api:
+    build: .
+    restart: always
+    pull_policy: build
+    depends_on:
+      - db
+    environment:
+      - TZ=Europe/Moscow
+      - DATASOURCE_URL=jdbc:postgresql://db:5432/db_weather
+      - DATASOURCE_USERNAME=postgres
+      - DATASOURCE_PASSWORD=postgres
+      - SERVER_PORT=8080
+    ports:
+      - '8080:8080'
+
+  db:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - TZ=Europe/Moscow
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=db_weather
+    ports:
+      - '5433:5432'
+    volumes:
+      - db:/var/lib/postgresql/data
+
+volumes:
+  db:
+    driver: local

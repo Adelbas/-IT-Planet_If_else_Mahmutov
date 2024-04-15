@@ -1,0 +1,1604 @@
+openapi: 3.0.2
+info:
+  title: Weather application
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Development server
+security:
+  - cookieAuth: []
+
+paths:
+  /registration:
+    post:
+      summary: Создание пользователя
+      tags:
+        - Authentication
+      operationId: registrate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationRequest'
+      responses:
+        '201':
+          description: Запрос успешно выполнен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistrationResponse'
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Запрос от авторизованного аккаунта
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Аккаунт с таким email уже существует
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /login:
+    post:
+      summary: Аутентификация пользователя
+      tags:
+        - Authentication
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Запрос успешно выполнен | Запрос от авторизованного аккаунта
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: id=1; Path=/; HttpOnly
+        '401':
+          description: Email или пароль не верны
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /accounts/{accountId}:
+    get:
+      summary: Получение аккаунта
+      tags:
+        - Account
+      operationId: getAccount
+      parameters:
+        - name: accountId
+          in: path
+          description: Идентификатор аккаунта пользователя
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+      responses:
+        '200':
+          description: Запрос успешно выполнен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Неверные авторизационные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Аккаунт с таким accountId не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      summary: Изменение аккаунта
+      tags:
+        - Account
+      operationId: updateAccount
+      parameters:
+        - name: accountId
+          in: path
+          description: Идентификатор аккаунта пользователя
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAccountRequest'
+      responses:
+        '200':
+          description: Запрос успешно выполнен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Запрос от неавторизованного аккаунта | Неверные авторизационные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Обновление не своего аккаунта | Аккаунт не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Аккаунт с таким email уже существует
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: Удаление аккаунта
+      tags:
+        - Account
+      operationId: deleteAccount
+      parameters:
+        - name: accountId
+          in: path
+          description: Идентификатор аккаунта пользователя
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+      responses:
+        '200':
+          description: Запрос успешно выполнен
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Запрос от неавторизованного аккаунта | Неверные авторизационные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Удаление не своего аккаунта | Аккаунт с таким accountId не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /accounts/search:
+    get:
+      summary: Поиск аккаунта
+      tags:
+        - AccountSearch
+      operationId: searchAccount
+      parameters:
+        - name: firstName
+          in: query
+          schema:
+            type: string
+            description: Имя пользователя, может использоваться только часть имени без учета регистра, если null, не участвует в фильтрации
+            example: Ivan
+        - name: lastName
+          in: query
+          schema:
+            type: string
+            description: Фамилия пользователя, может использоваться только часть фамилии без учета регистра, если null, не участвует в фильтрации
+            example: Ivanov
+        - name: email
+          in: query
+          schema:
+            type: string
+            description: Адрес электронной почты, может использоваться только часть адреса электронной почты без учета регистра, если null, не участвует в фильтрации
+            example: user@mail.ru
+        - name: form
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            description: Количество элементов, которое необходимо пропустить для формирования страницы с результатами (по умолчанию 0)
+            default: 0
+        - name: size
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            description: Количество элементов на странице (по умолчанию 10)
+            default: 10
+      responses:
+        '200':
+          description: Запрос успешно выполнен
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountResponse'
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Неверные авторизационные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /region/{regionId}:
+    get:
+      summary: Получение информации о регионе
+      tags:
+        - Region
+      operationId: getRegion
+      parameters:
+        - name: regionId
+          in: path
+          description: Идентификатор региона
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+      responses:
+        '200':
+          description: Запрос успешно выполнен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionResponse'
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Неверные авторизационные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Регион с таким regionId не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      summary: Изменение региона
+      tags:
+        - Region
+      operationId: updateRegion
+      parameters:
+        - name: regionId
+          in: path
+          description: Идентификатор региона
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegionRequest'
+      responses:
+        '200':
+          description: Запрос успешно выполнен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionResponse'
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Неверные авторизационные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Регион с таким regionId не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Регион с такими latitude и longitude уже существует
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: Удаление региона
+      tags:
+        - Region
+      operationId: deleteRegion
+      parameters:
+        - name: regionId
+          in: path
+          description: Идентификатор региона
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+      responses:
+        '200':
+          description: Запрос успешно выполнен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionResponse'
+        '400':
+          description: Ошибка валидации | Регион является родительским для другого региона
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Неверные авторизационные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Регион с таким regionId не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /region:
+    post:
+      summary: Добавление региона
+      tags:
+        - Region
+      operationId: createRegion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegionRequest'
+      responses:
+        '201':
+          description: Запрос успешно выполнен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionResponse'
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Неверные авторизационные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Регион с такими latitude и longitude уже существует
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /region/types/{typeId}:
+    get:
+      summary: Получение информации о типе региона
+      tags:
+        - RegionType
+      operationId: getRegionType
+      parameters:
+        - name: typeId
+          in: path
+          description: Идентификатор типа региона
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+      responses:
+        '200':
+          description: Запрос успешно выполнен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionTypeResponse'
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Неверные авторизационные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Тип региона с таким typeId не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      summary: Изменение типа региона
+      tags:
+        - RegionType
+      operationId: updateRegionType
+      parameters:
+        - name: typeId
+          in: path
+          description: Идентификатор типа региона
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegionTypeRequest'
+      responses:
+        '200':
+          description: Запрос успешно выполнен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionTypeResponse'
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Неверные авторизационные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Тип региона с таким typeId не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Тип региона с таким type уже существует
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: Удаление типа региона
+      tags:
+        - RegionType
+      operationId: deleteRegionType
+      parameters:
+        - name: typeId
+          in: path
+          description: Идентификатор типа региона
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+      responses:
+        '200':
+          description: Запрос успешно выполнен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionTypeResponse'
+        '400':
+          description: Ошибка валидации | Есть регионы с типом с typeId
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Неверные авторизационные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Тип региона с таким typeId не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /region/types:
+    post:
+      summary: Добавление типа региона
+      tags:
+        - RegionType
+      operationId: createRegionType
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegionTypeRequest'
+      responses:
+        '201':
+          description: Запрос успешно выполнен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionTypeResponse'
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Неверные авторизационные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Тип региона с таким type уже существует
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /region/weather/{regionId}:
+    get:
+      summary: Получение информации о погоде в регионе
+      tags:
+        - Weather
+      operationId: getRegionWeather
+      parameters:
+        - name: regionId
+          in: path
+          description: Идентификатор региона
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+      responses:
+        '200':
+          description: Запрос успешно выполнен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionWeatherResponse'
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Неверные авторизационные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Регион с regionld не найден или forecastld в данном регионе не найденна
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      summary: Изменение погоды
+      tags:
+        - Weather
+      operationId: updateRegionWeather
+      parameters:
+        - name: regionId
+          in: path
+          description: Идентификатор региона
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRegionWeatherRequest'
+      responses:
+        '200':
+          description: Запрос успешно выполнен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionWeatherResponse'
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Неверные авторизационные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Регион с regionld не найден или forecastld в данном регионе не найденна
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: Удаление погоды
+      tags:
+        - Weather
+      operationId: deleteRegionWeather
+      parameters:
+        - name: regionId
+          in: path
+          description: Идентификатор региона
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+      responses:
+        '200':
+          description: Запрос успешно выполнен
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Неверные авторизационные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Регион с regionld не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /region/weather:
+    post:
+      summary: Добавление погоды
+      tags:
+        - Weather
+      operationId: addWeather
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegionWeatherRequest'
+      responses:
+        '200':
+          description: Запрос успешно выполнен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostRegionWeatherResponse'
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Неверные авторизационные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Регион с regionld не найден или forecastld в данном регионе не найденна
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /region/{regionId}/weather/{weatherId}:
+    post:
+      summary: Добавление погоды для конкретного региона
+      tags:
+        - Weather
+      operationId: addWeatherToRegion
+      parameters:
+        - name: regionId
+          in: path
+          description: Идентификатор региона
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+        - name: weatherId
+          in: path
+          description: Идентификатор погоды
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+      responses:
+        '200':
+          description: Запрос успешно выполнен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionWeatherResponse'
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Неверные авторизационные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Регион с regionld не найден или погода в данном регионе не найденна
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: Удаление погоды для региона
+      tags:
+        - Weather
+      operationId: deleteWeatherFromRegion
+      parameters:
+        - name: regionId
+          in: path
+          description: Идентификатор региона
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+        - name: weatherId
+          in: path
+          description: Идентификатор погоды
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+      responses:
+        '200':
+          description: Запрос успешно выполнен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionResponse'
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Неверные авторизационные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Регион с regionld не найден или погода в данном регионе не найденна
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /region/weather/forecast/{forecastId}:
+    get:
+      summary: Получение информации о прогнозе погоды
+      tags:
+        - WeatherForecast
+      operationId: getWeatherForecast
+      parameters:
+        - name: forecastId
+          in: path
+          description: Идентификатор прогноза
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+      responses:
+        '200':
+          description: Запрос успешно выполнен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WeatherForecastResponse'
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Неверные авторизационные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Прогноза с таким forecastld не существует
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      summary: Изменение прогноза погоды
+      tags:
+        - WeatherForecast
+      operationId: updateWeatherForecast
+      parameters:
+        - name: forecastId
+          in: path
+          description: Идентификатор прогноза
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateWeatherForecastRequest'
+      responses:
+        '200':
+          description: Запрос успешно выполнен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WeatherForecastResponse'
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Неверные авторизационные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Прогноза с таким forecastld не существует
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: Удаление прогноза погоды
+      tags:
+        - WeatherForecast
+      operationId: deleteWeatherForecast
+      parameters:
+        - name: forecastId
+          in: path
+          description: Идентификатор прогноза
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+      responses:
+        '200':
+          description: Запрос успешно выполнен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WeatherForecastResponse'
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Неверные авторизационные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Прогноза с таким forecastld не существует
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /region/weather/forecast:
+    post:
+      summary: Добавление прогноза погоды
+      tags:
+        - WeatherForecast
+      operationId: createForecast
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WeatherForecastRequest'
+      responses:
+        '200':
+          description: Запрос успешно выполнен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WeatherForecastResponse'
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Неверные авторизационные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Региона с таким regionId не существует
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+components:
+
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: id
+
+  schemas:
+    ErrorResponse:
+      type: object
+      required:
+        - status
+        - message
+        - timestamp
+        - path
+      properties:
+        status:
+          type: integer
+          example: 404
+          description: Http status code
+        message:
+          type: string
+          description: Error message
+        timestamp:
+          type: string
+          format: date-time
+          description: Error occurrence time
+        path:
+          type: string
+          description: URI path
+        details:
+          type: object
+          description: Error details
+          additionalProperties:
+            type: string
+
+    RegistrationRequest:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - email
+        - password
+      properties:
+        firstName:
+          type: string
+          example: Ivan
+          description: Имя пользователя
+        lastName:
+          type: string
+          example: Ivanov
+          description: Фамилия пользователя
+        email:
+          type: string
+          format: email
+          example: user@mail.ru
+          description: Адрес электронной почты
+        password:
+          type: string
+          format: password
+          description: Пароль от аккаунта пользователя
+
+    RegistrationResponse:
+      type: object
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
+        - password
+      properties:
+        id:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+          example: Ivan
+          description: Имя пользователя
+        lastName:
+          type: string
+          example: Ivanov
+          description: Фамилия пользователя
+        email:
+          type: string
+          format: email
+          example: user@mail.ru
+          description: Адрес электронной почты
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: user@mail.ru
+          description: Адрес электронной почты
+        password:
+          type: string
+          format: password
+          description: Пароль от аккаунта пользователя
+
+    LoginResponse:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор аккаунта пользователя
+
+    AccountResponse:
+      type: object
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
+      properties:
+        id:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+          example: Ivan
+          description: Имя пользователя
+        lastName:
+          type: string
+          example: Ivanov
+          description: Фамилия пользователя
+        email:
+          type: string
+          format: email
+          example: user@mail.ru
+          description: Адрес электронной почты
+
+    UpdateAccountRequest:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - email
+        - password
+      properties:
+        firstName:
+          type: string
+          example: Ivan
+          description: Новое имя пользователя
+        lastName:
+          type: string
+          example: Ivanov
+          description: Новая фамилия пользователя
+        email:
+          type: string
+          format: email
+          example: user@mail.ru
+          description: Новый адрес электронной почты
+        password:
+          type: string
+          format: password
+          description: Пароль от аккаунта пользователя
+
+    RegionRequest:
+      type: object
+      required:
+        - name
+        - latitude
+        - longitude
+      properties:
+        name:
+          type: string
+          description: Название региона
+        parentRegion:
+          type: string
+          description: Название родительского региона
+        regionType:
+          type: integer
+          format: int64
+          description: Идентификатор типа региона
+        latitude:
+          type: number
+          format: double
+          description: Координаты широты
+        longitude:
+          type: number
+          format: double
+          description: Координаты долготы
+
+    RegionResponse:
+      type: object
+      required:
+        - id
+        - name
+        - latitude
+        - longitude
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор региона
+        name:
+          type: string
+          description: Название региона
+        parentRegion:
+          type: string
+          description: Название родительского региона
+        regionType:
+          type: integer
+          format: int64
+          description: Идентификатор типа региона
+        accountId:
+          type: integer
+          format: int64
+          description: Аккаунт внесший данные о регионе
+        latitude:
+          type: number
+          format: double
+          description: Координаты широты
+        longitude:
+          type: number
+          format: double
+          description: Координаты долготы
+
+    RegionTypeRequest:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          description: Тип региона
+
+    RegionTypeResponse:
+      type: object
+      required:
+        - id
+        - type
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор типа региона
+        type:
+          type: string
+          description: Тип региона
+
+    WeatherCondition:
+      type: string
+      description: Текущее состояние погоды
+      enum:
+        - CLEAR
+        - CLOUDY
+        - RAIN
+        - SNOW
+        - FOG
+        - STORM
+
+    Forecast:
+      type: object
+      required:
+        - id
+        - dateTime
+        - temperature
+        - weatherCondition
+        - regionId
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Уникальный идентификатор прогноза погоды
+        dateTime:
+          type: string
+          format: date-time
+          description: Дата и время прогноза в формате ISO-8601
+        temperature:
+          type: number
+          format: float
+          description: Прогнозируемая температура, °C
+        weatherCondition:
+          $ref: '#/components/schemas/WeatherCondition'
+        regionId:
+          type: integer
+          format: int64
+          description: Идентификатор региона, для которого сделан прогноз
+
+    RegionWeatherRequest:
+      type: object
+      required:
+        - regionId
+        - temperature
+        - humidity
+        - windSpeed
+        - weatherCondition
+        - precipitationAmount
+        - measurementDateTime
+      properties:
+        regionId:
+          type: integer
+          format: int64
+          minimum: 1
+          description: Идентификатор региона
+        temperature:
+          type: number
+          format: float
+          description: Температура в регионе, °C
+        humidity:
+          type: number
+          format: float
+          description: Влажность воздуха в регионе, %
+        windSpeed:
+          type: number
+          format: float
+          minimum: 0
+          description: Скорость ветра, м/с
+        weatherCondition:
+          $ref: '#/components/schemas/WeatherCondition'
+        precipitationAmount:
+          type: number
+          format: float
+          minimum: 0
+          description: Количество осадков, мм
+        measurementDateTime:
+          type: string
+          format: date-time
+          description: Дата и время измерения погодных условий в формате ISO-8601
+        weatherForecast:
+          type: array
+          description: Массив идентификаторов объектов с прогнозом погоды на ближайшие дни
+          items:
+            type: integer
+            format: int64
+
+    RegionWeatherResponse:
+      type: object
+      required:
+        - id
+        - regionName
+        - temperature
+        - humidity
+        - windSpeed
+        - weatherCondition
+        - precipitationAmount
+        - measurementDateTime
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор региона
+        regionName:
+          type: string
+          description: Название региона
+        temperature:
+          type: number
+          format: float
+          description: Температура в регионе, °C
+        humidity:
+          type: number
+          format: float
+          description: Влажность воздуха в регионе, %
+        windSpeed:
+          type: number
+          format: float
+          description: Скорость ветра, м/с
+        weatherCondition:
+          $ref: '#/components/schemas/WeatherCondition'
+        precipitationAmount:
+          type: number
+          format: float
+          description: Количество осадков, мм
+        measurementDateTime:
+          type: string
+          format: date-time
+          description: Дата и время измерения погодных условий в формате ISO-8601
+        weatherForecast:
+          type: array
+          description: Массив идентификаторов объектов с прогнозом погоды на ближайшие дни
+          items:
+            type: integer
+            format: int64
+
+    PostRegionWeatherResponse:
+      type: object
+      required:
+        - id
+        - temperature
+        - humidity
+        - windSpeed
+        - weatherCondition
+        - precipitationAmount
+        - measurementDateTime
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Уникальный идентификатор созданной записи о погоде в регионе
+        temperature:
+          type: number
+          format: float
+          description: Температура в регионе, °C
+        humidity:
+          type: number
+          format: float
+          description: Влажность воздуха в регионе, %
+        windSpeed:
+          type: number
+          format: float
+          description: Скорость ветра, м/с
+        weatherCondition:
+          $ref: '#/components/schemas/WeatherCondition'
+        precipitationAmount:
+          type: number
+          format: float
+          description: Количество осадков, мм
+        measurementDateTime:
+          type: string
+          format: date-time
+          description: Дата и время измерения погодных условий в формате ISO-8601
+        weatherForecast:
+          type: array
+          description: Массив идентификаторов объектов с прогнозом погоды на ближайшие дни
+          items:
+            type: integer
+            format: int64
+
+    UpdateRegionWeatherRequest:
+      type: object
+      required:
+        - temperature
+        - humidity
+        - windSpeed
+        - weatherCondition
+        - precipitationAmount
+        - measurementDateTime
+      properties:
+        temperature:
+          type: number
+          format: float
+          description: Температура в регионе, °C
+        humidity:
+          type: number
+          format: float
+          description: Влажность воздуха в регионе, %
+        windSpeed:
+          type: number
+          format: float
+          minimum: 0
+          description: Скорость ветра, м/с
+        weatherCondition:
+          $ref: '#/components/schemas/WeatherCondition'
+        precipitationAmount:
+          type: number
+          format: float
+          minimum: 0
+          description: Количество осадков, мм
+        measurementDateTime:
+          type: string
+          format: date-time
+          description: Дата и время измерения погодных условий в формате ISO-8601
+        weatherForecast:
+          type: array
+          description: Массив идентификаторов объектов с прогнозом погоды на ближайшие дни
+          items:
+            type: integer
+            format: int64
+
+    WeatherForecastResponse:
+      type: object
+      required:
+        - id
+        - dateTime
+        - temperature
+        - weatherCondition
+        - regionId
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Уникальный идентификатор прогноза погоды
+        regionId:
+          type: integer
+          format: int64
+          description: Идентификатор региона, для которого сделан прогноз
+        dateTime:
+          type: string
+          format: date-time
+          description: Дата и время прогноза в формате ISO-8601
+        temperature:
+          type: number
+          format: float
+          description: Прогнозируемая температура, °C
+        weatherCondition:
+          $ref: '#/components/schemas/WeatherCondition'
+
+    UpdateWeatherForecastRequest:
+      type: object
+      required:
+        - temperature
+        - weatherCondition
+        - dateTime
+      properties:
+        temperature:
+          type: number
+          format: float
+          description: Новая прогнозируемая температура, °C
+        weatherCondition:
+          $ref: '#/components/schemas/WeatherCondition'
+        dateTime:
+          type: string
+          format: date-time
+          description: Новая дата и время прогноза в формате ISO-8601
+
+    WeatherForecastRequest:
+      type: object
+      required:
+        - regionId
+        - dateTime
+        - temperature
+        - weatherCondition
+      properties:
+        regionId:
+          type: integer
+          format: int64
+          minimum: 1
+          description: Идентификатор региона, для которого делается прогноз
+        dateTime:
+          type: string
+          format: date-time
+          description: Дата и время, на которые делается прогноз в формате ISO-8601
+        temperature:
+          type: number
+          format: float
+          description: Прогнозируемая температура, °C
+        weatherCondition:
+          $ref: '#/components/schemas/WeatherCondition'
