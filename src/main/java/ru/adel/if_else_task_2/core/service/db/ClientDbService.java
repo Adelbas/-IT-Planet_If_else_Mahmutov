@@ -43,6 +43,15 @@ public class ClientDbService {
     }
 
     public List<Client> search(String firstName, String lastName, String email, int form, int size) {
+        if (firstName == null) {
+            firstName = "";
+        }
+        if (lastName == null) {
+            lastName = "";
+        }
+        if (email == null) {
+            email = "";
+        }
         return clientRepository.findClientByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCaseAndEmailContainingIgnoreCase(
                 firstName, lastName, email, PageRequest.of(form,size)
         ).orElse(new ArrayList<>());
