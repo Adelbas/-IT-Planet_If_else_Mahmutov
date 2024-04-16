@@ -772,6 +772,78 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+  /region/weather/search:
+    get:
+      summary: Поиск информации о погоде в регионе
+      tags:
+        - WeatherSearch
+      operationId: searchWeather
+      parameters:
+        - name: startDateTime
+          in: query
+          schema:
+            type: string
+            format: date-time
+            description: Дата и время начала периода для поиска погодных условий, в формате ISO-8601. Если null , не участвует в фильтрации
+        - name: endDateTime
+          in: query
+          schema:
+            type: string
+            format: date-time
+            description: Дата и время конца периода для поиска погодных условий, в формате ISO-8601. Если null , не участвует в фильтрации
+        - name: regionId
+          in: query
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            description: Идентификатор региона, для которого ищется информация о погоде. Если null , не участвует в фильтрации
+        - name: weatherCondition
+          in: query
+          schema:
+            $ref: '#/components/schemas/WeatherCondition'
+        - name: form
+          in: query
+          schema:
+            type: integer
+            format: int32
+            default: 0
+            description: Количество элементов, которое необходимо пропустить для формирования страницы с результатами (по умолчанию 0)
+        - name: size
+          in: query
+          schema:
+            type: integer
+            format: int32
+            default: 10
+            description: Количество элементов на странице (по умолчанию 10)
+      responses:
+        '200':
+          description: Запрос успешно выполнен
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RegionWeatherResponse'
+        '400':
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Неверные авторизационные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Регион с regionld не найден или forecastld в данном регионе не найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
   /region/{regionId}/weather/{weatherId}:
     post:
       summary: Добавление погоды для конкретного региона
