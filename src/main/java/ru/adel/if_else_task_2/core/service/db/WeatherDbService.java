@@ -31,6 +31,11 @@ public class WeatherDbService {
                 .orElseThrow(()->new NotFoundException("Weather not found"));
     }
 
+    public Weather getWeatherById(Long weatherId) {
+        return weatherRepository.findById(weatherId)
+                .orElseThrow(()->new NotFoundException("Weather not found"));
+    }
+
     public void deleteWeather(Weather weather) {
         weatherRepository.delete(weather);
     }

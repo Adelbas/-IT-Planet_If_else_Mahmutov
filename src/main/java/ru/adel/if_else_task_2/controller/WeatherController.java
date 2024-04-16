@@ -6,10 +6,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ru.adel.api.WeatherApi;
+import ru.adel.if_else_task_2.public_interface.region.RegionMapper;
+import ru.adel.if_else_task_2.public_interface.region.dto.RegionResponseDto;
 import ru.adel.if_else_task_2.public_interface.weather.WeatherMapper;
 import ru.adel.if_else_task_2.public_interface.weather.WeatherService;
+import ru.adel.if_else_task_2.public_interface.weather.dto.GetWeatherResponseDto;
 import ru.adel.if_else_task_2.public_interface.weather.dto.WeatherRequestDto;
 import ru.adel.model.PostRegionWeatherResponse;
+import ru.adel.model.RegionResponse;
 import ru.adel.model.RegionWeatherRequest;
 import ru.adel.model.RegionWeatherResponse;
 import ru.adel.model.UpdateRegionWeatherRequest;
@@ -22,6 +26,8 @@ public class WeatherController implements WeatherApi {
     private final WeatherService weatherService;
 
     private final WeatherMapper weatherMapper;
+
+    private final RegionMapper regionMapper;
 
     @Override
     public ResponseEntity<PostRegionWeatherResponse> addWeather(RegionWeatherRequest regionWeatherRequest) {
@@ -69,5 +75,25 @@ public class WeatherController implements WeatherApi {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @Override
+    public ResponseEntity<RegionWeatherResponse> addWeatherToRegion(Long regionId, Long weatherId) {
+        log.info("Handle add weather {} to region {} request", weatherId, regionId);
 
+        GetWeatherResponseDto getWeatherResponseDto = weatherService.addWeatherToRegion(weatherId, regionId);
+
+        RegionWeatherResponse regionWeatherResponse = weatherMapper.toRegionWeatherResponse(getWeatherResponseDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(regionWeatherResponse);
+    }
+
+    @Override
+    public ResponseEntity<RegionResponse> deleteWeatherFromRegion(Long regionId, Long weatherId) {
+        log.info("Handle delete weather {} from region {} request", weatherId, regionId);
+
+        RegionResponseDto regionResponseDto = weatherService.deleteWeatherFromRegion(weatherId, regionId);
+
+        RegionResponse regionResponse = regionMapper.toRegionResponse(regionResponseDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(regionResponse);
+    }
 }

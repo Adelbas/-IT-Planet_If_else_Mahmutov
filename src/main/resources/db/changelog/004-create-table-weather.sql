@@ -5,7 +5,7 @@
 CREATE TABLE IF NOT EXISTS weather
 (
     id                    BIGSERIAL,
-    region_id             BIGINT    NOT NULL,
+    region_id             BIGINT,
     temperature           NUMERIC   NOT NULL,
     humidity              NUMERIC   NOT NULL,
     wind_speed            NUMERIC   NOT NULL,

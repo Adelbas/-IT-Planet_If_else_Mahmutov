@@ -29,7 +29,7 @@ public class Weather {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "region_id", nullable = false)
+    @JoinColumn(name = "region_id")
     private Region region;
 
     @Column(name = "temperature", nullable = false)

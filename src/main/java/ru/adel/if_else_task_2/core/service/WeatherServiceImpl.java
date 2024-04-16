@@ -14,6 +14,8 @@ import ru.adel.if_else_task_2.core.entity.enums.WeatherCondition;
 import ru.adel.if_else_task_2.core.service.db.ForecastDbService;
 import ru.adel.if_else_task_2.core.service.db.RegionDbService;
 import ru.adel.if_else_task_2.core.service.db.WeatherDbService;
+import ru.adel.if_else_task_2.public_interface.region.RegionMapper;
+import ru.adel.if_else_task_2.public_interface.region.dto.RegionResponseDto;
 import ru.adel.if_else_task_2.public_interface.weather.WeatherMapper;
 import ru.adel.if_else_task_2.public_interface.weather.WeatherService;
 import ru.adel.if_else_task_2.public_interface.weather.dto.GetWeatherResponseDto;
@@ -36,6 +38,8 @@ public class WeatherServiceImpl implements WeatherService {
     private final WeatherDbService weatherDbService;
 
     private final WeatherMapper weatherMapper;
+
+    private final RegionMapper regionMapper;
 
     private final RegionDbService regionDbService;
 
@@ -143,6 +147,25 @@ public class WeatherServiceImpl implements WeatherService {
         Weather weather = weatherDbService.getActualWeatherByRegion(region);
 
         weatherDbService.deleteWeather(weather);
+    }
+
+    @Override
+    public GetWeatherResponseDto addWeatherToRegion(@Min(1) Long weatherId, @Min(1) Long regionId) {
+        Region region = regionDbService.getRegionById(regionId);
+        Weather weather = weatherDbService.getWeatherById(weatherId);
+
+        weather.setRegion(region);
+        return weatherMapper.toGetWeatherResponseDto(weatherDbService.saveWeather(weather));
+    }
+
+    @Override
+    public RegionResponseDto deleteWeatherFromRegion(@Min(1) Long weatherId, @Min(1) Long regionId) {
+        Region region = regionDbService.getRegionById(regionId);
+        Weather weather = weatherDbService.getWeatherById(weatherId);
+
+        weather.setRegion(null);
+        weatherDbService.saveWeather(weather);
+        return regionMapper.toRegionResponseDto(region);
     }
 
     @Override
