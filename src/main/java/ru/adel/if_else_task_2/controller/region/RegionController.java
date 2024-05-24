@@ -1,17 +1,17 @@
-package ru.adel.if_else_task_2.controller;
+package ru.adel.if_else_task_2.controller.region;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import ru.adel.api.RegionApi;
+import ru.adel.if_else_task_2.api.RegionApi;
 import ru.adel.if_else_task_2.public_interface.region.RegionMapper;
 import ru.adel.if_else_task_2.public_interface.region.RegionService;
 import ru.adel.if_else_task_2.public_interface.region.dto.GetRegionResponseDto;
 import ru.adel.if_else_task_2.public_interface.region.dto.RegionResponseDto;
-import ru.adel.model.RegionRequest;
-import ru.adel.model.RegionResponse;
+import ru.adel.if_else_task_2.model.RegionRequest;
+import ru.adel.if_else_task_2.model.RegionResponse;
 
 @Slf4j
 @RestController

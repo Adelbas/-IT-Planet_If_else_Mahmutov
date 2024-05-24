@@ -11,8 +11,9 @@ import ru.adel.if_else_task_2.core.repository.WeatherRepository;
 import ru.adel.if_else_task_2.public_interface.exception.NotFoundException;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -40,12 +41,12 @@ public class WeatherDbService {
         weatherRepository.delete(weather);
     }
 
-    public List<Weather> searchWeatherWithoutRegionAndWeatherCondition(LocalDateTime startDateTime, LocalDateTime endDateTime, PageRequest pageRequest) {
+    public List<Weather> searchWeatherWithoutRegionAndWithoutWeatherCondition(LocalDateTime startDateTime, LocalDateTime endDateTime, PageRequest pageRequest) {
         return weatherRepository.findWeatherByMeasurementDateTimeBetween(
                 startDateTime,
                 endDateTime,
                 pageRequest
-        ).orElse(new ArrayList<>());
+        ).get().collect(Collectors.toList());
     }
 
     public List<Weather> searchWeatherWithoutRegion(
@@ -55,7 +56,7 @@ public class WeatherDbService {
                 endDateTime,
                 weatherCondition,
                 pageRequest
-        ).orElse(new ArrayList<>());
+        ).get().collect(Collectors.toList());
     }
 
     public List<Weather> searchWithRegionAndWithoutWeatherCondition(
@@ -65,7 +66,7 @@ public class WeatherDbService {
                 endDateTime,
                 region,
                 pageRequest
-        ).orElse(new ArrayList<>());
+        ).get().collect(Collectors.toList());
     }
 
     public List<Weather> searchWithAllParams(
@@ -80,6 +81,23 @@ public class WeatherDbService {
                 region,
                 weatherCondition,
                 pageRequest
-        ).orElse(new ArrayList<>());
+        ).get().collect(Collectors.toList());
+    }
+
+    public List<Weather> searchWeatherInRegion(
+            Long regionId,
+            LocalDateTime startDateTime,
+            LocalDateTime endDateTime,
+            Optional<WeatherCondition> weatherCondition,
+            int form,
+            int size) {
+        return weatherRepository.searchWeatherInRegion(
+                regionId,
+                startDateTime.toString(),
+                endDateTime.toString(),
+                weatherCondition.map(Enum::toString).orElse(null),
+                form,
+                size
+        );
     }
 }

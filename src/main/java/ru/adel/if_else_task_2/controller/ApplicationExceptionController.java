@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import ru.adel.if_else_task_2.public_interface.exception.AlreadyAuthenticatedException;
 import ru.adel.if_else_task_2.public_interface.exception.ClientAlreadyExistsException;
 import ru.adel.if_else_task_2.public_interface.exception.NotFoundException;
@@ -112,7 +113,7 @@ public class ApplicationExceptionController {
         return errorResponse;
     }
 
-    @ExceptionHandler({RegionWithTypeExistsException.class, RegionIsParentException.class, HttpMessageNotReadableException.class})
+    @ExceptionHandler({RegionWithTypeExistsException.class, RegionIsParentException.class, HttpMessageNotReadableException.class, MethodArgumentTypeMismatchException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleBadRequestException(RuntimeException e, @NonNull WebRequest request) {
         log.error(e.getMessage(),e);

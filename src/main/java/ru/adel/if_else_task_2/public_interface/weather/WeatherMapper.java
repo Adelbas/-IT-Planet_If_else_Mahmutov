@@ -9,10 +9,10 @@ import ru.adel.if_else_task_2.public_interface.weather.dto.GetWeatherResponseDto
 import ru.adel.if_else_task_2.public_interface.weather.dto.PostWeatherResponseDto;
 import ru.adel.if_else_task_2.public_interface.weather.dto.WeatherRequestDto;
 import ru.adel.if_else_task_2.public_interface.weather.dto.WeatherSearchRequestDto;
-import ru.adel.model.RegionWeatherRequest;
-import ru.adel.model.PostRegionWeatherResponse;
-import ru.adel.model.RegionWeatherResponse;
-import ru.adel.model.UpdateRegionWeatherRequest;
+import ru.adel.if_else_task_2.model.RegionWeatherRequest;
+import ru.adel.if_else_task_2.model.PostRegionWeatherResponse;
+import ru.adel.if_else_task_2.model.RegionWeatherResponse;
+import ru.adel.if_else_task_2.model.UpdateRegionWeatherRequest;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -42,7 +42,7 @@ public interface WeatherMapper {
             Optional<OffsetDateTime> startDateTime,
             Optional<OffsetDateTime> endDateTime,
             Optional<Long> regionId,
-            Optional<ru.adel.model.WeatherCondition> weatherCondition,
+            Optional<ru.adel.if_else_task_2.model.WeatherCondition> weatherCondition,
             int form, int size
     );
 
@@ -62,7 +62,7 @@ public interface WeatherMapper {
         return optional.orElse(null);
     }
 
-    default Optional<WeatherCondition> mapWeatherCondition(Optional<ru.adel.model.WeatherCondition> optional) {
+    default Optional<WeatherCondition> mapWeatherCondition(Optional<ru.adel.if_else_task_2.model.WeatherCondition> optional) {
         return optional.map(weatherCondition -> WeatherCondition.valueOf(weatherCondition.toString())).or(Optional::empty);
     }
 }

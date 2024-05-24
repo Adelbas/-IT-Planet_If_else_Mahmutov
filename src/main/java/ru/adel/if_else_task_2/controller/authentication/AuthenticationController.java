@@ -1,21 +1,21 @@
-package ru.adel.if_else_task_2.controller;
+package ru.adel.if_else_task_2.controller.authentication;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import ru.adel.api.AuthenticationApi;
+import ru.adel.if_else_task_2.api.AuthenticationApi;
 import ru.adel.if_else_task_2.public_interface.authentication.AuthenticationMapper;
 import ru.adel.if_else_task_2.public_interface.authentication.AuthenticationService;
 import ru.adel.if_else_task_2.public_interface.authentication.dto.LoginRequestDto;
 import ru.adel.if_else_task_2.public_interface.authentication.dto.LoginResponseDto;
 import ru.adel.if_else_task_2.public_interface.authentication.dto.RegistrationRequestDto;
 import ru.adel.if_else_task_2.public_interface.authentication.dto.RegistrationResponseDto;
-import ru.adel.model.LoginRequest;
-import ru.adel.model.LoginResponse;
-import ru.adel.model.RegistrationRequest;
-import ru.adel.model.RegistrationResponse;
+import ru.adel.if_else_task_2.model.LoginRequest;
+import ru.adel.if_else_task_2.model.LoginResponse;
+import ru.adel.if_else_task_2.model.RegistrationRequest;
+import ru.adel.if_else_task_2.model.RegistrationResponse;
 
 @Slf4j
 @RestController

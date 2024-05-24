@@ -1,16 +1,14 @@
-package ru.adel.if_else_task_2.controller;
+package ru.adel.if_else_task_2.controller.account;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import ru.adel.api.AccountSearchApi;
+import ru.adel.if_else_task_2.api.AccountSearchApi;
 import ru.adel.if_else_task_2.public_interface.account.AccountMapper;
 import ru.adel.if_else_task_2.public_interface.account.AccountService;
-import ru.adel.model.AccountResponse;
+import ru.adel.if_else_task_2.model.AccountResponse;
 import ru.adel.if_else_task_2.public_interface.account.dto.AccountResponseDto;
 import ru.adel.if_else_task_2.public_interface.account.dto.AccountSearchRequestDto;
 
@@ -20,9 +18,9 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class AccountSearchController implements ru.adel.api.AccountSearchApi {
+public class AccountSearchController implements AccountSearchApi {
 
-    private static final int DEFAULT_SIZE = 1;
+    private static final int DEFAULT_SIZE = 10;
     private static final int DEFAULT_FORM = 0;
 
     private final AccountService accountService;

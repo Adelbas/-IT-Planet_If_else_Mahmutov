@@ -10,8 +10,8 @@ import ru.adel.if_else_task_2.public_interface.region.dto.GetRegionResponseDto;
 import ru.adel.if_else_task_2.public_interface.region.dto.RegionRequestDto;
 import ru.adel.if_else_task_2.public_interface.region.dto.RegionResponseDto;
 import ru.adel.if_else_task_2.public_interface.region.dto.UpdateRegionRequestDto;
-import ru.adel.model.RegionRequest;
-import ru.adel.model.RegionResponse;
+import ru.adel.if_else_task_2.model.RegionRequest;
+import ru.adel.if_else_task_2.model.RegionResponse;
 
 @Mapper(componentModel = "spring", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface RegionMapper {

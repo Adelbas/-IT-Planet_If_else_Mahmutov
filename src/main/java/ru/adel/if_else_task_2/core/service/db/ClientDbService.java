@@ -8,9 +8,9 @@ import ru.adel.if_else_task_2.core.entity.Client;
 import ru.adel.if_else_task_2.core.repository.ClientRepository;
 import ru.adel.if_else_task_2.public_interface.exception.NotFoundException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -54,6 +54,6 @@ public class ClientDbService {
         }
         return clientRepository.findClientByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCaseAndEmailContainingIgnoreCase(
                 firstName, lastName, email, PageRequest.of(form,size)
-        ).orElse(new ArrayList<>());
+        ).get().collect(Collectors.toList());
     }
 }

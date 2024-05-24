@@ -1,17 +1,16 @@
-package ru.adel.if_else_task_2.controller;
+package ru.adel.if_else_task_2.controller.account;
 
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import ru.adel.api.AccountApi;
+import ru.adel.if_else_task_2.api.AccountApi;
 import ru.adel.if_else_task_2.public_interface.account.AccountMapper;
 import ru.adel.if_else_task_2.public_interface.account.AccountService;
 import ru.adel.if_else_task_2.public_interface.account.dto.UpdateAccountRequestDto;
-import ru.adel.model.AccountResponse;
-import ru.adel.model.UpdateAccountRequest;
+import ru.adel.if_else_task_2.model.AccountResponse;
+import ru.adel.if_else_task_2.model.UpdateAccountRequest;
 
 @Slf4j
 @RestController
@@ -43,7 +42,7 @@ public class AccountController implements AccountApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteAccount(@Min(0) Long accountId) {
+    public ResponseEntity<Void> deleteAccount(Long accountId) {
         log.info("Handle delete account request: {}", accountId);
 
         accountService.deleteAccount(accountId);

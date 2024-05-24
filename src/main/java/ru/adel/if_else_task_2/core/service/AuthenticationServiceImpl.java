@@ -2,7 +2,6 @@ package ru.adel.if_else_task_2.core.service;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -25,8 +24,6 @@ import java.util.Optional;
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final ClientDbService clientDbService;
-
-    private final AuthenticationManager authenticationManager;
 
     @Override
     public RegistrationResponseDto registrate(@Valid RegistrationRequestDto registrationRequestDto) {

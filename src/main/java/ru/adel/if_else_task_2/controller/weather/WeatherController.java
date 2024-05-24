@@ -1,22 +1,22 @@
-package ru.adel.if_else_task_2.controller;
+package ru.adel.if_else_task_2.controller.weather;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import ru.adel.api.WeatherApi;
+import ru.adel.if_else_task_2.api.WeatherApi;
 import ru.adel.if_else_task_2.public_interface.region.RegionMapper;
 import ru.adel.if_else_task_2.public_interface.region.dto.RegionResponseDto;
 import ru.adel.if_else_task_2.public_interface.weather.WeatherMapper;
 import ru.adel.if_else_task_2.public_interface.weather.WeatherService;
 import ru.adel.if_else_task_2.public_interface.weather.dto.GetWeatherResponseDto;
 import ru.adel.if_else_task_2.public_interface.weather.dto.WeatherRequestDto;
-import ru.adel.model.PostRegionWeatherResponse;
-import ru.adel.model.RegionResponse;
-import ru.adel.model.RegionWeatherRequest;
-import ru.adel.model.RegionWeatherResponse;
-import ru.adel.model.UpdateRegionWeatherRequest;
+import ru.adel.if_else_task_2.model.PostRegionWeatherResponse;
+import ru.adel.if_else_task_2.model.RegionResponse;
+import ru.adel.if_else_task_2.model.RegionWeatherRequest;
+import ru.adel.if_else_task_2.model.RegionWeatherResponse;
+import ru.adel.if_else_task_2.model.UpdateRegionWeatherRequest;
 
 @Slf4j
 @RestController

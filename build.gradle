@@ -41,21 +41,15 @@ dependencies {
 
     implementation libs.mapstruct
     annotationProcessor libs.mapstruct.processor
-
-
-//    testImplementation libs.assertj
-//    testImplementation libs.spring.test
-//    testImplementation libs.testcontainers.jupiter
-//    testImplementation libs.testcontainers.postgresql
 }
 
 openApiGenerate {
     generatorName.set("spring")
     inputSpec.set("$rootDir/src/main/resources/openapi/weather-app.yaml")
-    outputDir.set("$buildDir/generated/openapi")
-    apiPackage.set("ru.adel.api")
-    invokerPackage.set("ru.adel.invoker")
-    modelPackage.set("ru.adel.model")
+    outputDir.set("$buildDir/generated/sources/annotationProcessor/java/main")
+    apiPackage.set("ru.adel.if_else_task_2.api")
+    invokerPackage.set("ru.adel.if_else_task_2.invoker")
+    modelPackage.set("ru.adel.if_else_task_2.model")
     configOptions.set([
             library                             : "spring-boot",
             useOptional                         : "false",
@@ -77,7 +71,7 @@ compileJava.dependsOn tasks.openApiGenerate
 sourceSets {
     main {
         java {
-            srcDirs += "$buildDir/generated"
+            srcDirs 'src/main/java', 'build/generated/sources/annotationProcessor/java/main'
         }
     }
 }

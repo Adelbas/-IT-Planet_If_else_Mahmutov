@@ -10,9 +10,9 @@ import java.time.ZoneOffset;
 
 import ru.adel.if_else_task_2.public_interface.forecast.dto.ForecastResponseDto;
 import ru.adel.if_else_task_2.public_interface.forecast.dto.UpdateForecastRequestDto;
-import ru.adel.model.WeatherForecastRequest;
-import ru.adel.model.WeatherForecastResponse;
-import ru.adel.model.UpdateWeatherForecastRequest;
+import ru.adel.if_else_task_2.model.WeatherForecastRequest;
+import ru.adel.if_else_task_2.model.WeatherForecastResponse;
+import ru.adel.if_else_task_2.model.UpdateWeatherForecastRequest;
 
 @Mapper(componentModel = "spring", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface ForecastMapper {

@@ -188,12 +188,14 @@ public class WeatherServiceImpl implements WeatherService {
 
         Region region = regionDbService.getRegionById(weatherSearchRequestDto.regionId());
 
-        if (weatherSearchRequestDto.weatherCondition().isEmpty()) {
-            return searchWithRegionAndWithoutWeatherCondition(startDateTime, endDateTime, region, pageRequest);
-        }
-
-        WeatherCondition weatherCondition = WeatherCondition.valueOf(weatherSearchRequestDto.weatherCondition().get().toString());
-        List<Weather> weathers = weatherDbService.searchWithAllParams(startDateTime, endDateTime, region, weatherCondition, pageRequest);
+        List<Weather> weathers = weatherDbService.searchWeatherInRegion(
+                region.getId(),
+                startDateTime,
+                endDateTime,
+                weatherSearchRequestDto.weatherCondition(),
+                weatherSearchRequestDto.form(),
+                weatherSearchRequestDto.size()
+        );
 
         return weatherMapper.toWeatherResponseDtos(weathers);
     }
@@ -201,7 +203,7 @@ public class WeatherServiceImpl implements WeatherService {
     private List<GetWeatherResponseDto> searchWithoutRegion(
             LocalDateTime startDateTime, LocalDateTime endDateTime, Optional<WeatherCondition> weatherCondition, PageRequest pageRequest) {
         if (weatherCondition.isEmpty()) {
-            return searchWithoutRegionAndWeatherCondition(startDateTime, endDateTime, pageRequest);
+            return searchWithoutRegionAndWithoutWeatherCondition(startDateTime, endDateTime, pageRequest);
         }
 
         WeatherCondition actualWeatherCondition = WeatherCondition.valueOf(weatherCondition.get().toString());
@@ -213,15 +215,8 @@ public class WeatherServiceImpl implements WeatherService {
         return weatherMapper.toWeatherResponseDtos(weathers);
     }
 
-    private List<GetWeatherResponseDto> searchWithoutRegionAndWeatherCondition(LocalDateTime startDateTime, LocalDateTime endDateTime, PageRequest pageRequest) {
-        List<Weather> weathers = weatherDbService.searchWeatherWithoutRegionAndWeatherCondition(startDateTime, endDateTime, pageRequest);
-
-        return weatherMapper.toWeatherResponseDtos(weathers);
-    }
-
-    private List<GetWeatherResponseDto> searchWithRegionAndWithoutWeatherCondition(LocalDateTime startDateTime, LocalDateTime endDateTime, Region region, PageRequest pageRequest) {
-
-        List<Weather> weathers = weatherDbService.searchWithRegionAndWithoutWeatherCondition(startDateTime, endDateTime, region, pageRequest);
+    private List<GetWeatherResponseDto> searchWithoutRegionAndWithoutWeatherCondition(LocalDateTime startDateTime, LocalDateTime endDateTime, PageRequest pageRequest) {
+        List<Weather> weathers = weatherDbService.searchWeatherWithoutRegionAndWithoutWeatherCondition(startDateTime, endDateTime, pageRequest);
 
         return weatherMapper.toWeatherResponseDtos(weathers);
     }

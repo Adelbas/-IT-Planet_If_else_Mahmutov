@@ -1,4 +1,4 @@
-package ru.adel.if_else_task_2.controller;
+package ru.adel.if_else_task_2.controller.weather;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,13 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ru.adel.if_else_task_2.public_interface.forecast.ForecastMapper;
 import ru.adel.if_else_task_2.public_interface.forecast.ForecastService;
-import ru.adel.api.WeatherForecastApi;
+import ru.adel.if_else_task_2.api.WeatherForecastApi;
 import ru.adel.if_else_task_2.public_interface.forecast.dto.ForecastRequestDto;
 import ru.adel.if_else_task_2.public_interface.forecast.dto.ForecastResponseDto;
 import ru.adel.if_else_task_2.public_interface.forecast.dto.UpdateForecastRequestDto;
-import ru.adel.model.UpdateWeatherForecastRequest;
-import ru.adel.model.WeatherForecastRequest;
-import ru.adel.model.WeatherForecastResponse;
+import ru.adel.if_else_task_2.model.UpdateWeatherForecastRequest;
+import ru.adel.if_else_task_2.model.WeatherForecastRequest;
+import ru.adel.if_else_task_2.model.WeatherForecastResponse;
 
 @Slf4j
 @RestController

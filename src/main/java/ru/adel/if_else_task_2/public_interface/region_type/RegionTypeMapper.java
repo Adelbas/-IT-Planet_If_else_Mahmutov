@@ -6,8 +6,8 @@ import ru.adel.if_else_task_2.core.entity.RegionType;
 import ru.adel.if_else_task_2.public_interface.region_type.dto.RegionTypeRequestDto;
 import ru.adel.if_else_task_2.public_interface.region_type.dto.RegionTypeResponseDto;
 import ru.adel.if_else_task_2.public_interface.region_type.dto.UpdateRegionTypeRequestDto;
-import ru.adel.model.RegionTypeRequest;
-import ru.adel.model.RegionTypeResponse;
+import ru.adel.if_else_task_2.model.RegionTypeRequest;
+import ru.adel.if_else_task_2.model.RegionTypeResponse;
 
 @Mapper(componentModel = "spring", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface RegionTypeMapper {

@@ -1,18 +1,17 @@
-package ru.adel.if_else_task_2.controller;
+package ru.adel.if_else_task_2.controller.weather;
 
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import ru.adel.api.WeatherSearchApi;
+import ru.adel.if_else_task_2.api.WeatherSearchApi;
 import ru.adel.if_else_task_2.public_interface.weather.WeatherMapper;
 import ru.adel.if_else_task_2.public_interface.weather.WeatherService;
 import ru.adel.if_else_task_2.public_interface.weather.dto.GetWeatherResponseDto;
 import ru.adel.if_else_task_2.public_interface.weather.dto.WeatherSearchRequestDto;
-import ru.adel.model.RegionWeatherResponse;
-import ru.adel.model.WeatherCondition;
+import ru.adel.if_else_task_2.model.RegionWeatherResponse;
+import ru.adel.if_else_task_2.model.WeatherCondition;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -23,7 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class WeatherSearchController implements WeatherSearchApi {
 
-    private static final int DEFAULT_SIZE = 1;
+    private static final int DEFAULT_SIZE = 10;
 
     private static final int DEFAULT_FORM = 0;
 
