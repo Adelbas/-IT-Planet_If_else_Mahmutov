@@ -50,7 +50,7 @@ public class Region {
     private RegionType regionType;
 
     @ManyToOne
-    @JoinColumn(name = "client_id", nullable = false)
+    @JoinColumn(name = "client_id")
     private Client client;
 
     @ManyToOne
