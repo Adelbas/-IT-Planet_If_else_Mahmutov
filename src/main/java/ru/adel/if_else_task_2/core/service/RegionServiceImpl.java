@@ -43,7 +43,8 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     public RegionResponseDto createRegion(@Valid RegionRequestDto regionRequestDto) {
-        checkRegionToDuplicateByCoordinates(regionRequestDto.latitude(), regionRequestDto.longitude());
+        checkRegionToDuplicateByCoordinates(regionRequestDto.latitude1(), regionRequestDto.longitude1(),
+                regionRequestDto.latitude2(), regionRequestDto.longitude2());
 
         Long currentClientId = Long.valueOf(SecurityContextHolder.getContext().getAuthentication().getName());
         Client client = clientDbService.getClientById(currentClientId);
@@ -51,8 +52,10 @@ public class RegionServiceImpl implements RegionService {
         Region region = Region.builder()
                 .name(regionRequestDto.name())
                 .client(client)
-                .latitude(regionRequestDto.latitude())
-                .longitude(regionRequestDto.longitude())
+                .latitude1(regionRequestDto.latitude1())
+                .longitude1(regionRequestDto.longitude1())
+                .latitude2(regionRequestDto.latitude2())
+                .longitude2(regionRequestDto.longitude2())
                 .build();
 
         if (regionRequestDto.regionType() != null) {
@@ -72,14 +75,19 @@ public class RegionServiceImpl implements RegionService {
     public RegionResponseDto updateRegion(@Valid UpdateRegionRequestDto updateRegionRequestDto) {
         Region regionToUpdate = regionDbService.getRegionById(updateRegionRequestDto.id());
 
-        if (!regionToUpdate.getLatitude().equals(updateRegionRequestDto.latitude())
-                || !regionToUpdate.getLongitude().equals(updateRegionRequestDto.longitude())) {
-            checkRegionToDuplicateByCoordinates(updateRegionRequestDto.latitude(), updateRegionRequestDto.longitude());
+        if (!regionToUpdate.getLatitude1().equals(updateRegionRequestDto.latitude1())
+                && !regionToUpdate.getLongitude1().equals(updateRegionRequestDto.longitude1())
+                && !regionToUpdate.getLatitude2().equals(updateRegionRequestDto.latitude2())
+                && !regionToUpdate.getLongitude2().equals(updateRegionRequestDto.longitude2())) {
+            checkRegionToDuplicateByCoordinates(updateRegionRequestDto.latitude1(), updateRegionRequestDto.longitude1(),
+                    updateRegionRequestDto.latitude2(), updateRegionRequestDto.longitude2());
         }
 
         regionToUpdate.setName(updateRegionRequestDto.name());
-        regionToUpdate.setLatitude(updateRegionRequestDto.latitude());
-        regionToUpdate.setLongitude(updateRegionRequestDto.longitude());
+        regionToUpdate.setLatitude1(updateRegionRequestDto.latitude1());
+        regionToUpdate.setLongitude1(updateRegionRequestDto.longitude1());
+        regionToUpdate.setLatitude2(updateRegionRequestDto.latitude1());
+        regionToUpdate.setLongitude2(updateRegionRequestDto.longitude2());
 
         if (updateRegionRequestDto.regionType() != null) {
             RegionType regionType = regionTypeDbService.getRegionTypeById(updateRegionRequestDto.regionType());
@@ -105,14 +113,16 @@ public class RegionServiceImpl implements RegionService {
         regionDbService.deleteRegion(region);
     }
 
-    private void checkRegionToDuplicateByCoordinates(Double latitude, Double longitude) throws RegionAlreadyExistsException{
+    private void checkRegionToDuplicateByCoordinates(Double latitude1, Double longitude1, Double latitude2, Double longitude2) throws RegionAlreadyExistsException{
         Optional<Region> sameRegion = regionDbService.findRegionByLatitudeAndLongitude(
-                latitude,
-                longitude
+                latitude1,
+                longitude1,
+                latitude2,
+                longitude2
         );
 
         if (sameRegion.isPresent()) {
-            throw new RegionAlreadyExistsException(latitude, longitude);
+            throw new RegionAlreadyExistsException(latitude1, longitude1, latitude2, longitude2);
         }
     }
 }

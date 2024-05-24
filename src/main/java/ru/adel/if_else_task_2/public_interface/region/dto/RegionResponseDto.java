@@ -8,6 +8,8 @@ public record RegionResponseDto (
         String name,
         String parentRegion,
         Long regionType,
-        Double latitude,
-        Double longitude
+        Double latitude1,
+        Double longitude1,
+        Double latitude2,
+        Double longitude2
 ) { }

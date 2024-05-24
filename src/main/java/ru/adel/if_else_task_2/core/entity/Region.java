@@ -29,7 +29,7 @@ import java.util.List;
 @AllArgsConstructor
 @ToString(exclude = {"client", "childRegions", "parentRegion", "forecasts"})
 @EqualsAndHashCode(exclude = {"client", "childRegions", "parentRegion", "forecasts"})
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"latitude", "longitude"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"latitude1", "longitude1","latitude2", "longitude2"}))
 public class Region {
 
     @Id
@@ -40,10 +40,16 @@ public class Region {
     private String name;
 
     @Column(nullable = false)
-    private Double latitude;
+    private Double latitude1;
 
     @Column(nullable = false)
-    private Double longitude;
+    private Double longitude1;
+
+    @Column(nullable = false)
+    private Double latitude2;
+
+    @Column(nullable = false)
+    private Double longitude2;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "region_type_id")

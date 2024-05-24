@@ -12,7 +12,7 @@ public interface RegionRepository extends JpaRepository<Region, Long> {
 
     boolean existsRegionByRegionType(RegionType regionType);
 
-    Optional<Region> findRegionByLatitudeAndLongitude(Double latitude, Double longitude);
+    Optional<Region> findRegionByLatitude1AndLongitude1AndLatitude2AndLongitude2(Double latitude1, Double longitude1, Double latitude2, Double longitude2);
 
     Optional<Region> findRegionByName(String name);
 

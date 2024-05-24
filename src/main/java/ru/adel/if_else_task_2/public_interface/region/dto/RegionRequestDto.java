@@ -11,7 +11,11 @@ public record RegionRequestDto(
         String parentRegion,
         Long regionType,
         @NotNull
-        Double latitude,
+        Double latitude1,
         @NotNull
-        Double longitude
+        Double longitude1,
+        @NotNull
+        Double latitude2,
+        @NotNull
+        Double longitude2
 ) { }

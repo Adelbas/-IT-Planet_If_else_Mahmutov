@@ -1306,8 +1306,10 @@ components:
       type: object
       required:
         - name
-        - latitude
-        - longitude
+        - latitude1
+        - longitude1
+        - latitude2
+        - longitude2
       properties:
         name:
           type: string
@@ -1319,22 +1321,32 @@ components:
           type: integer
           format: int64
           description: Идентификатор типа региона
-        latitude:
+        latitude1:
           type: number
           format: double
-          description: Координаты широты
-        longitude:
+          description: Координаты широты1
+        longitude1:
           type: number
           format: double
-          description: Координаты долготы
+          description: Координаты долготы1
+        latitude2:
+          type: number
+          format: double
+          description: Координаты широты2
+        longitude2:
+          type: number
+          format: double
+          description: Координаты долготы2
 
     RegionResponse:
       type: object
       required:
         - id
         - name
-        - latitude
-        - longitude
+        - latitude1
+        - longitude1
+        - latitude2
+        - longitude2
       properties:
         id:
           type: integer
@@ -1354,14 +1366,22 @@ components:
           type: integer
           format: int64
           description: Аккаунт внесший данные о регионе
-        latitude:
+        latitude1:
           type: number
           format: double
-          description: Координаты широты
-        longitude:
+          description: Координаты широты1
+        longitude1:
           type: number
           format: double
-          description: Координаты долготы
+          description: Координаты долготы1
+        latitude2:
+          type: number
+          format: double
+          description: Координаты широты2
+        longitude2:
+          type: number
+          format: double
+          description: Координаты долготы2
 
     RegionTypeRequest:
       type: object

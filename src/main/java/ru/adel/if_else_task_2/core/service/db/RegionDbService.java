@@ -27,10 +27,12 @@ public class RegionDbService {
                 .orElseThrow(() -> new NotFoundException("Region not found with name: " + name));
     }
 
-    public Optional<Region> findRegionByLatitudeAndLongitude(Double latitude, Double longitude) {
-        return regionRepository.findRegionByLatitudeAndLongitude(
-                latitude,
-                longitude
+    public Optional<Region> findRegionByLatitudeAndLongitude(Double latitude1, Double longitude1, Double latitude2, Double longitude2) {
+        return regionRepository.findRegionByLatitude1AndLongitude1AndLatitude2AndLongitude2(
+                latitude1,
+                longitude1,
+                latitude2,
+                longitude2
         );
     }
 
