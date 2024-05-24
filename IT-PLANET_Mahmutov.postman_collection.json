@@ -1,0 +1,834 @@
+{
+	"info": {
+		"_postman_id": "2ef2c0e2-d4fc-4bb6-9b21-151d18f3f2bb",
+		"name": "IT-PLANET",
+		"description": "Postman collection for testing api endpoints of final task",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "25972841"
+	},
+	"item": [
+		{
+			"name": "authentication",
+			"item": [
+				{
+					"name": "registration",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"{{firstName}}\",\r\n  \"lastName\": \"{{lastName}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"{{password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{ip}}:{{port}}/registration"
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"{{password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{ip}}:{{port}}/login"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "account",
+			"item": [
+				{
+					"name": "getAccount",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{session_cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{ip}}:{{port}}/accounts/{{accountId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "searchAccount",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{session_cookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{ip}}:{{port}}/accounts/search?firstName={{firstName}}&lastName={{lastName}}&email={{email}}&form={{form}}&size={{size}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"accounts",
+								"search"
+							],
+							"query": [
+								{
+									"key": "firstName",
+									"value": "{{firstName}}"
+								},
+								{
+									"key": "lastName",
+									"value": "{{lastName}}"
+								},
+								{
+									"key": "email",
+									"value": "{{email}}"
+								},
+								{
+									"key": "form",
+									"value": "{{form}}"
+								},
+								{
+									"key": "size",
+									"value": "{{size}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateAccount",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{session_cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"{{firstName}}\",\r\n  \"lastName\": \"{{lastName}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"{{password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{ip}}:{{port}}/accounts/{{accountId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "deleteAccount",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{session_cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{ip}}:{{port}}/accounts/{{accountId}}"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "region",
+			"item": [
+				{
+					"name": "getRegion",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{session_cookie}}",
+								"type": "text"
+							}
+						],
+						"url": "{{ip}}:{{port}}/region/{{regionId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "createRegion",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{session_cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"{{regionName}}\",\r\n  \"latitude1\": {{latitude1}},\r\n  \"longitude1\": {{longitude1}},\r\n  \"latitude2\": {{latitude2}},\r\n  \"longitude2\": {{longitude2}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{ip}}:{{port}}/region"
+					},
+					"response": []
+				},
+				{
+					"name": "updateRegion",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{session_cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"{{regionName}}\",\r\n  \"regionType\": \"{{regionTypeId}}\",\r\n  \"latitude1\": {{latitude1}},\r\n  \"longitude1\": {{longitude1}},\r\n  \"latitude2\": {{latitude2}},\r\n  \"longitude2\": {{longitude2}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{ip}}:{{port}}/region/{{regionId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "deleteRegion",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{session_cookie}}",
+								"type": "text"
+							}
+						],
+						"url": "{{ip}}:{{port}}/region/{{regionId}}"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "region-type",
+			"item": [
+				{
+					"name": "createType",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{session_cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"type\": \"{{regionTypeName}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{ip}}:{{port}}/region/types"
+					},
+					"response": []
+				},
+				{
+					"name": "getType",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{session_cookie}}",
+								"type": "text"
+							}
+						],
+						"url": "{{ip}}:{{port}}/region/types/{{regionTypeId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "updateType",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{session_cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"type\": \"{{regionTypeName}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{ip}}:{{port}}/region/types/{{regionTypeId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "deleteType",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{session_cookie}}",
+								"type": "text"
+							}
+						],
+						"url": "{{ip}}:{{port}}/region/types/{{regionTypeId}}"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "weather",
+			"item": [
+				{
+					"name": "createWeather",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{session_cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"regionId\": {{regionId}},\r\n  \"temperature\": {{temperature}},\r\n  \"humidity\": {{humidity}},\r\n  \"windSpeed\": {{windSpeed}},\r\n  \"weatherCondition\": \"{{weatherCondition}}\",\r\n  \"precipitationAmount\": {{precipitationAmount}},\r\n  \"measurementDateTime\": \"{{measurementDateTime}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{ip}}:{{port}}/region/weather"
+					},
+					"response": []
+				},
+				{
+					"name": "getRegionWeather",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{session_cookie}}",
+								"type": "text"
+							}
+						],
+						"url": "{{ip}}:{{port}}/region/weather/{{weatherId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "searchWeather",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{session_cookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{ip}}:{{port}}/region/weather/search?startDateTime={{startDateTime}}&endDateTime={{endDateTime}}&regionId={{regionId}}&weatherCondition={{weatherCondition}}&form={{form}}&size={{size}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"region",
+								"weather",
+								"search"
+							],
+							"query": [
+								{
+									"key": "startDateTime",
+									"value": "{{startDateTime}}"
+								},
+								{
+									"key": "endDateTime",
+									"value": "{{endDateTime}}"
+								},
+								{
+									"key": "regionId",
+									"value": "{{regionId}}"
+								},
+								{
+									"key": "weatherCondition",
+									"value": "{{weatherCondition}}"
+								},
+								{
+									"key": "form",
+									"value": "{{form}}"
+								},
+								{
+									"key": "size",
+									"value": "{{size}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateWeather",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{session_cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"temperature\": {{temperature}},\r\n  \"humidity\": {{humidity}},\r\n  \"windSpeed\": {{windSpeed}},\r\n  \"weatherCondition\": \"{{weatherCondition}}\",\r\n  \"precipitationAmount\": {{precipitationAmount}},\r\n  \"measurementDateTime\": \"{{measurementDateTime}}\",\r\n  \"weatherForecast\": [\r\n    0\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{ip}}:{{port}}/region/weather/{{weatherId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "addWeatherToRegion",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{session_cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{ip}}:{{port}}/region/{{regionId}}/weather/{{weatherId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "deleteWeather",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{session_cookie}}",
+								"type": "text"
+							}
+						],
+						"url": "{{ip}}:{{port}}/region/weather/{{weatherId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "deleteWeatherForRegion",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{session_cookie}}",
+								"type": "text"
+							}
+						],
+						"url": "{{ip}}:{{port}}/region/{{regionId}}/weather/{{weatherId}}"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "forecast",
+			"item": [
+				{
+					"name": "createForecast",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{session_cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"regionId\": {{regionId}},\r\n  \"dateTime\": \"{{measurementDateTime}}\",\r\n  \"temperature\": {{temperature}},\r\n  \"weatherCondition\": \"{{weatherCondition}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{ip}}:{{port}}/region/weather/forecast"
+					},
+					"response": []
+				},
+				{
+					"name": "getForecast",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{session_cookie}}",
+								"type": "text"
+							}
+						],
+						"url": "{{ip}}:{{port}}/region/weather/forecast/{{forecastId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "updateForecast",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{session_cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"temperature\": {{temperature}},\r\n  \"weatherCondition\": \"{{weatherCondition}}\",\r\n  \"dateTime\": \"{{measurementDateTime}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{ip}}:{{port}}/region/weather/forecast/{{forecastId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "deleteForecast",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{session_cookie}}",
+								"type": "text"
+							}
+						],
+						"url": "{{ip}}:{{port}}/region/weather/forecast/{{forecastId}}"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "session_cookie",
+			"value": "id=1",
+			"type": "string"
+		},
+		{
+			"key": "ip",
+			"value": "http://localhost",
+			"type": "string"
+		},
+		{
+			"key": "port",
+			"value": "8080",
+			"type": "string"
+		},
+		{
+			"key": "accountId",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "regionId",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "regionTypeId",
+			"value": "1"
+		},
+		{
+			"key": "weatherId",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "forecastId",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "firstName",
+			"value": "user",
+			"type": "string"
+		},
+		{
+			"key": "lastName",
+			"value": "user",
+			"type": "string"
+		},
+		{
+			"key": "email",
+			"value": "user@mail.ru",
+			"type": "string"
+		},
+		{
+			"key": "password",
+			"value": "user",
+			"type": "string"
+		},
+		{
+			"key": "form",
+			"value": "0",
+			"type": "string"
+		},
+		{
+			"key": "size",
+			"value": "10",
+			"type": "string"
+		},
+		{
+			"key": "regionName",
+			"value": "Kazan",
+			"type": "string"
+		},
+		{
+			"key": "latitude1",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "longitude1",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "latitude2",
+			"value": "2",
+			"type": "string"
+		},
+		{
+			"key": "longitude2",
+			"value": "2",
+			"type": "string"
+		},
+		{
+			"key": "regionTypeName",
+			"value": "City",
+			"type": "string"
+		},
+		{
+			"key": "temperature",
+			"value": "12",
+			"type": "string"
+		},
+		{
+			"key": "humidity",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "windSpeed",
+			"value": "34.2",
+			"type": "string"
+		},
+		{
+			"key": "weatherCondition",
+			"value": "SNOW",
+			"type": "string"
+		},
+		{
+			"key": "precipitationAmount",
+			"value": "2.3",
+			"type": "string"
+		},
+		{
+			"key": "measurementDateTime",
+			"value": "2024-01-05T14:36:41.088Z",
+			"type": "string"
+		},
+		{
+			"key": "startDateTime",
+			"value": "2024-01-05T14:36:41.088Z",
+			"type": "string"
+		},
+		{
+			"key": "endDateTime",
+			"value": "2024-01-05T14:36:41.088Z",
+			"type": "string"
+		}
+	]
+}
